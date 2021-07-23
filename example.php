@@ -30,7 +30,7 @@ $dir = opendir($parent_directory);
 echo '<form name="displayfile" action="" method="POST">';
 echo '<select name="file2">';
 echo '<option value="">Logfiles</option>';
-$i  =  1;
+
 while(false !== ($file = readdir($dir)))
 {
 	$files[] = $file;
@@ -39,13 +39,11 @@ while(false !== ($file = readdir($dir)))
 		echo "<option value=".$file.">$file</option>";
 	}
 	//file2 is the name of the dropdown
-//	$selectedfile = @$_POST['file2'];
 	$selectedfile = $_POST['file2'];
 	$path = __DIR__.'/tests/wdb2/'.$selectedfile;
 }
 echo '</select>';
 }
-//echo '<input type="submit" value="displayfile" class="button" />';
 
 echo "<button type=\"submit\" name=\"displayfile\">Submit</button>\n";
 $reader = new Reader($path);
@@ -78,7 +76,6 @@ foreach ($reader->generateRecords() as $id => $record) {
 	echo "</tr>";
 
 	if (++$recordNum <= 0) {
-//	if (++$recordNum >= 10) {
         break;
     }
 }
