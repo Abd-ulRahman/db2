@@ -29,31 +29,18 @@ $parent_directory = 'tests\wdb2';
 $dir = opendir($parent_directory);
 echo '<form name="displayfile" action="" method="POST">';
 echo '<select name="file2">';
-//echo '<option value="">Logfiles</option>';
+echo '<option value="">Logfiles</option>';
 $i  =  1;
 while(false !== ($file = readdir($dir)))
 {
 	$files[] = $file;
 	if(($file != ".") and ($file != ".."))
 	{
-
-		$FileCount = count($files);
 		echo "<option value=".$file.">$file</option>";
-          if(is_dir($dir."/".$file)  ==  true)  {
-          $fullpath  =  $dir."/".$file;
-          array_push($files,array($file));
-          dir_recurse($fullpath,$files[$i]);
-          $i++;
-		}else  {
-			$fullpath  =  $dir."/".$file;
-			array_push($files,$fullpath);
-          $i++;
-		}
 	}
 	//file2 is the name of the dropdown
 //	$selectedfile = @$_POST['file2'];
 	$selectedfile = $_POST['file2'];
-	$content = file($selectedfile);
 	$path = __DIR__.'/tests/wdb2/'.$selectedfile;
 }
 echo '</select>';
