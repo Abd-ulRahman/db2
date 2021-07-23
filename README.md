@@ -69,6 +69,7 @@ Also check out example.php, which is what I'm using during development.
 | 8.0.1 | WDC2 | ✓ |  |
 | 1.13.2 | 1SLC | ✓ |  |
 | 8.1.0 - ? | WDC3 | ✓ |  |
+| 9.0.2 - ? | WDB2 | ✓ |  |
 
 All features of DB2 files should be supported (offset map / embedded strings, copy blocks, common blocks, pallet data, etc).
 
