@@ -25,27 +25,85 @@ use \Erorus\DB2\Reader;
 if (isset($argv[1])) {
     $path = $argv[1];
 } else {
-$parent_directory = 'tests\wdb2';
-$dir = opendir($parent_directory);
-echo '<form name="displayfile" action="" method="POST">';
-echo '<select name="file2">';
-echo '<option value="">Logfiles</option>';
 
-while(false !== ($file = readdir($dir)))
-{
-	$files[] = $file;
-	if(($file != ".") and ($file != ".."))
-	{
-		echo "<option value=".$file.">$file</option>";
-	}
-	//file2 is the name of the dropdown
-	$selectedfile = $_POST['file2'];
+$parent_directory = './tests/wdb2';
+$file_types = 'db2';
+
+//===================================================//
+// FUNCTION: directoryToArray                        //
+//                                                   //
+// Parameters:                                       //
+//  - $root: The directory to process                //
+//  - $to_return: f=files, d=directories, b=both     //
+//  - $file_types: the extensions of file types to   //
+//                 to return if files selected       //
+//===================================================//
+function directoryToArray($root, $to_return='b', $file_types=false) {
+  $array_items = array();
+  if ($file_types) { $file_types=explode(',',$file_types); }
+  if ($handle = opendir($root)) {
+    while (false !== ($file = readdir($handle))) {
+      if ($file != "." && $file != "..") {
+
+        $add_item = false;
+        $type = (is_dir($root. "/" . $file))?'d':'f';
+        $name = preg_replace("/\/\//si", "/", $file);
+
+        if ($type=='d' && ($to_return=='b' || $to_return=='d') ) {
+          $add_item = true;
+        }
+
+        if ($type=='f' && ($to_return=='b' || $to_return=='f') ) {
+          $fext = (explode('.',$name));
+          $ext = strtolower(end($fext));
+          if ( !$file_types || in_array($ext, $file_types) ) {
+            $add_item = true;
+          }
+        }
+
+        if ($add_item) {
+          $array_items[] = array ( 'name'=>$name, 'type'=>$type, 'root'=>$root);
+        }
+      }
+    } // End While
+    closedir($handle);
+  } // End If
+  return $array_items;
+}
+
+    echo '
+<html>
+<head>
+  <script type="text/javascript">
+    function changeFolder(folder) {
+      document.pickFile.submit();
+    }
+  </script>
+</head>
+
+<body>';
+
+
+$fileList = directoryToArray($parent_directory,'f',$file_types);
+
+echo "<form name=\"pickFile\" method=\"POST\">\n";
+echo "<select name=\"file2\">\n";
+echo '<option value=\"\">Logfiles</option>\n';
+foreach ($fileList as $file) {
+	echo "<option value=\"$file[name]\">$file[name]</option>\n";
+	$selectedfile = @$_POST['file2'];
+//	$selectedfile = $_POST['file2'];
 	$path = __DIR__.'/tests/wdb2/'.$selectedfile;
 }
-echo '</select>';
-}
+echo '</select><br><br>';
 
-echo "<button type=\"submit\" name=\"displayfile\">Submit</button>\n";
+echo "<button type=\"submit\" name=\"pickFile\">Submit</button>\n";
+
+echo "</form>\n";
+echo "</body>\n";
+echo "</html>\n";
+
+}
 $reader = new Reader($path);
 echo "<td>".$selectedfile," Layout: ", dechex($reader->getLayoutHash()), "\n";
 if (isset($argv[2])) {
@@ -58,24 +116,27 @@ echo "<tr>";
 
 $recordNum = 0;
 foreach ($reader->generateRecords() as $id => $record) {
-    echo "<td>" .$id, ": ";//  implode(',', Reader::flattenRecord($record));
+    echo "<td>" .$id, ": "; // implode(',', Reader::flattenRecord($record));
 
     $colNum = 0;
     foreach ($record as $colName => $colVal) {
         if ($colNum++ > 0) {
-          //  echo "<td> </td>";
+          //  echo ",";
+        	echo "<td>";
         };
         if (is_array($colVal)) {
             echo '[', implode(',', $colVal), ']';
         } else {
-            echo "<td>" .$colVal, "</td>";
+            echo $colVal, "</td>";
         }
+        
     }
 
     echo "\n";
 	echo "</tr>";
 
 	if (++$recordNum <= 0) {
+//	if (++$recordNum >= 10) {
         break;
     }
 }
