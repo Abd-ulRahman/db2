@@ -26,7 +26,7 @@ if (isset($argv[1])) {
     $path = $argv[1];
 } else {
 
-$parent_directory = './tests/wdb2';
+$parent_directory = './tests';
 $file_types = 'db2';
 
 //===================================================//
@@ -56,6 +56,7 @@ function directoryToArray($root, $to_return='b', $file_types=false) {
         if ($type=='f' && ($to_return=='b' || $to_return=='f') ) {
           $fext = (explode('.',$name));
           $ext = strtolower(end($fext));
+      //  //  $ext = end(explode('.',$name));
           if ( !$file_types || in_array($ext, $file_types) ) {
             $add_item = true;
           }
@@ -71,6 +72,7 @@ function directoryToArray($root, $to_return='b', $file_types=false) {
   return $array_items;
 }
 
+
     echo '
 <html>
 <head>
@@ -84,16 +86,30 @@ function directoryToArray($root, $to_return='b', $file_types=false) {
 <body>';
 
 
-$fileList = directoryToArray($parent_directory,'f',$file_types);
-
 echo "<form name=\"pickFile\" method=\"POST\">\n";
+
+$directoryList = directoryToArray($parent_directory,'d');
+
+echo "<select name=\"folder\" onBlur=\"changeFolder(this.value);\">\n";
+echo '<option value=\"\">Logfolder</option>\n';
+foreach ($directoryList as $folder) {
+  $selected = ($_POST[folder]==$folder[name])? 'selected' : '';
+  echo "<option value=\"$folder[name]\" $selected>$folder[name]</option>\n";
+}
+echo '</select><br><br>';
+
+$working_folder = ($_POST[folder]) ? '/'.$_POST[folder].'/' : '/'.$directoryList[0][name].'/';
+
+$fileList = directoryToArray($parent_directory.'/'.$working_folder,'f',$file_types);
+
+
 echo "<select name=\"file2\">\n";
 echo '<option value=\"\">Logfiles</option>\n';
 foreach ($fileList as $file) {
 	echo "<option value=\"$file[name]\">$file[name]</option>\n";
 	$selectedfile = @$_POST['file2'];
 //	$selectedfile = $_POST['file2'];
-	$path = __DIR__.'/tests/wdb2/'.$selectedfile;
+	$path = __DIR__.$parent_directory.$working_folder.$selectedfile;
 }
 echo '</select><br><br>';
 
@@ -102,7 +118,6 @@ echo "<button type=\"submit\" name=\"pickFile\">Submit</button>\n";
 echo "</form>\n";
 echo "</body>\n";
 echo "</html>\n";
-
 }
 $reader = new Reader($path);
 echo "<td>".$selectedfile," Layout: ", dechex($reader->getLayoutHash()), "\n";
