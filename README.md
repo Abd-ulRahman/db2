@@ -1,8 +1,9 @@
 [![Build Status](https://travis-ci.org/erorus/db2.svg?branch=master)](https://travis-ci.org/erorus/db2) [![Coverage Status](https://coveralls.io/repos/github/erorus/db2/badge.svg?branch=master)](https://coveralls.io/github/erorus/db2?branch=master) [![Become a Patron!](https://everynothing.net/patronButton.png)](https://www.patreon.com/bePatron?u=4445407)
 # Results Screen Shots
 
-![alt tag](https://i.imgur.com/gHdm4Gk.jpg "WDB2")
-![alt tag](https://i.imgur.com/N7gk77a.jpg "WDB2")
+![alt tag](https://i.imgur.com/TZHMET9.jpg "WDB2")
+
+![alt tag](https://i.imgur.com/p5fYjDf.jpg "WDB2")
 
 # DB2 Reader
 
