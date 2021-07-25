@@ -3,9 +3,7 @@
 
 ![alt tag](https://i.imgur.com/HGIYQQA.jpg "WDB2")
 
-![alt tag](https://i.imgur.com/TZHMET9.jpg "WDB2")
-
-![alt tag](https://i.imgur.com/p5fYjDf.jpg "WDB2")
+![alt tag](https://i.imgur.com/k7DxPQu.jpg "WDB2")
 
 # DB2 Reader
 
