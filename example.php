@@ -8,13 +8,19 @@
 </head>
 
 <div class="box" align="center">
-<body bgcolor="#FFFFCC">
+<body bgcolor="#4b4b00">
 <style>
+body{
+	Color: white;
+}
+h1{
+	Color: green;
+}
 td {
-    border: solid 1px black;
+    border: solid 1px white;
 }
 </style>
-<table style="border: 5px solid #333; border-collapse: collapse">
+<table style="border: 5px solid balck; border-collapse: collapse">
 
 <?php
 
@@ -90,7 +96,8 @@ echo "<form name=\"pickFile\" method=\"POST\">\n";
 
 $directoryList = directoryToArray($parent_directory,'d');
 
-echo "<select name=\"folder\" onBlur=\"changeFolder(this.value);\">\n";
+//echo "<select name=\"folder\" onBlur=\"changeFolder(this.value);\">\n";
+echo "<select name=\"folder\" onchange=\"changeFolder(this.value);\">\n";
 echo '<option value=\"\">Logfolder</option>\n';
 foreach ($directoryList as $folder) {
   $selected = ($_POST[folder]==$folder[name])? 'selected' : '';
@@ -106,8 +113,8 @@ $fileList = directoryToArray($parent_directory.'/'.$working_folder,'f',$file_typ
 echo "<select name=\"file2\">\n";
 echo '<option value=\"\">Logfiles</option>\n';
 foreach ($fileList as $file) {
-	echo "<option value=\"$file[name]\">$file[name]</option>\n";
 	$selectedfile = @$_POST['file2'];
+	echo "<option value=\"$file[name]\">$file[name]</option>\n";
 //	$selectedfile = $_POST['file2'];
 	$path = __DIR__.$parent_directory.$working_folder.$selectedfile;
 }
