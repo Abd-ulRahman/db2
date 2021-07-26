@@ -1,0 +1,48 @@
+COLUMNS
+int ID
+int ScoreColor
+int DungeonScoreMin
+int DungeonScoreMax
+int OrderIndex
+int KeystoneLevelMin
+int KeystoneLevelMax
+int Field_9_1_0_38627_007?
+int Field_9_1_0_38627_008?
+int Field_9_1_0_38950_009?
+int Field_9_1_0_38950_010?
+
+LAYOUT 81230D93
+BUILD 9.1.0.38511, 9.1.0.38524, 9.1.0.38549, 9.1.0.38600
+$id$ID<32>
+ScoreColor<32>
+DungeonScoreMin<32>
+DungeonScoreMax<32>
+OrderIndex<32>
+KeystoneLevelMin<32>
+KeystoneLevelMax<32>
+
+LAYOUT DCF94CC5
+BUILD 9.1.0.38627, 9.1.0.38709, 9.1.0.38783, 9.1.0.38802, 9.1.0.38872
+$id$ID<32>
+ScoreColor<32>
+DungeonScoreMin<32>
+DungeonScoreMax<32>
+OrderIndex<32>
+KeystoneLevelMin<32>
+KeystoneLevelMax<32>
+Field_9_1_0_38627_007<32>
+Field_9_1_0_38627_008<32>
+
+LAYOUT 09E2483B
+BUILD 9.1.0.38950, 9.1.0.39015, 9.1.0.39069, 9.1.0.39121, 9.1.0.39136, 9.1.0.39172, 9.1.0.39185, 9.1.0.39226, 9.1.0.39229, 9.1.0.39262, 9.1.0.39282, 9.1.0.39289, 9.1.0.39291, 9.1.0.39318, 9.1.0.39335, 9.1.0.39413, 9.1.0.39427, 9.1.0.39497, 9.1.0.39498
+$id$ID<32>
+ScoreColor<32>
+DungeonScoreMin<32>
+DungeonScoreMax<32>
+OrderIndex<32>
+KeystoneLevelMin<32>
+KeystoneLevelMax<32>
+Field_9_1_0_38627_007<32>
+Field_9_1_0_38627_008<32>
+Field_9_1_0_38950_009<32>
+Field_9_1_0_38950_010<32>
