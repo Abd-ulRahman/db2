@@ -939,7 +939,7 @@ class Reader
      */
     private function getDBDef() {
         $baseName = preg_replace('/\.[\w\W]*/', '', $this->fileName);
-        $url = sprintf('https://raw.githubusercontent.com/wowdev/WoWDBDefs/master/definitions/%s.dbd', $baseName);
+        $url = sprintf('http://127.0.0.1/definitions/%s.dbd', $baseName);
 
         $ch = curl_init();
         curl_setopt_array($ch, [
