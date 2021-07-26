@@ -113,8 +113,8 @@ $fileList = directoryToArray($parent_directory.'/'.$working_folder,'f',$file_typ
 echo "<select name=\"file2\">\n";
 echo '<option value=\"\">Logfiles</option>\n';
 foreach ($fileList as $file) {
-	$selectedfile = @$_POST['file2'];
 	echo "<option value=\"$file[name]\">$file[name]</option>\n";
+	$selectedfile = @$_POST['file2'];
 //	$selectedfile = $_POST['file2'];
 	$path = __DIR__.$parent_directory.$working_folder.$selectedfile;
 }
@@ -127,7 +127,7 @@ echo "</body>\n";
 echo "</html>\n";
 }
 $reader = new Reader($path);
-echo "<td>".$selectedfile," Layout: ", dechex($reader->getLayoutHash()), "\n";
+echo "<td>".$selectedfile," Layout: ", dechex($reader->getLayoutHash()), nl2br("\n");
 if (isset($argv[2])) {
     $reader->fetchColumnNames();
     print_r($reader->getRecord($argv[2]));
@@ -136,6 +136,8 @@ if (isset($argv[2])) {
 echo "<table>";
 echo "<tr>";
 
+$ColumnData = $reader->fetchColumnNames();
+echo '<tr><td>', implode('<td>', $ColumnData), '<td></tr>';
 $recordNum = 0;
 foreach ($reader->generateRecords() as $id => $record) {
     echo "<td>" .$id, ": "; // implode(',', Reader::flattenRecord($record));
@@ -143,7 +145,6 @@ foreach ($reader->generateRecords() as $id => $record) {
     $colNum = 0;
     foreach ($record as $colName => $colVal) {
         if ($colNum++ > 0) {
-          //  echo ",";
         	echo "<td>";
         };
         if (is_array($colVal)) {
@@ -154,7 +155,6 @@ foreach ($reader->generateRecords() as $id => $record) {
         
     }
 
-    echo "\n";
 	echo "</tr>";
 
 	if (++$recordNum <= 0) {
