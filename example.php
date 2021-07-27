@@ -8,7 +8,7 @@
 </head>
 
 <div class="box" align="center">
-<body bgcolor="#4b4b00">
+<body bgcolor="#343a40">
 <style>
 body{
 	Color: white;
@@ -20,7 +20,7 @@ td {
     border: solid 1px white;
 }
 </style>
-<table style="border: 5px solid balck; border-collapse: collapse">
+<table style="border: 5px solid #117a8b; border-collapse: collapse">
 
 <?php
 
