@@ -163,7 +163,7 @@ foreach ($reader->generateRecords() as $id => $record) {
 	echo "</tr>";
 
 	if (++$recordNum <= 0) {
-//	if (++$recordNum >= 10) {
+//	if (++$recordNum >= 10) { // Used for fast testing huge data
         break;
     }
 }
