@@ -28,9 +28,6 @@ require_once __DIR__ . '/src/autoload.php';
 
 use \Erorus\DB2\Reader;
 
-if (isset($argv[1])) {
-    $path = $argv[1];
-} else {
 
 $parent_directory = './tests';
 $file_types = 'db2';
@@ -78,6 +75,14 @@ function directoryToArray($root, $to_return='b', $file_types=false) {
   return $array_items;
 }
 
+if (isset($_POST['pickfile'])) {
+
+  // User has selected a file take whatever action you want based
+  // upon the values for folder and file
+
+    $path = $_GET['pickfile'];
+
+} else {
 
     echo '
 <html>
@@ -100,22 +105,21 @@ $directoryList = directoryToArray($parent_directory,'d');
 echo "<select name=\"folder\" onchange=\"changeFolder(this.value);\">\n";
 echo '<option value=\"\">Logfolder</option>\n';
 foreach ($directoryList as $folder) {
+
+$working_folder = ($_POST[folder]) ? '/'.$_POST[folder].'/' : '/'.$directoryList[0][name].'/';
+
   $selected = ($_POST[folder]==$folder[name])? 'selected' : '';
   echo "<option value=\"$folder[name]\" $selected>$folder[name]</option>\n";
 }
 echo '</select><br><br>';
-
-$working_folder = ($_POST[folder]) ? '/'.$_POST[folder].'/' : '/'.$directoryList[0][name].'/';
-
 $fileList = directoryToArray($parent_directory.'/'.$working_folder,'f',$file_types);
 
 
-echo "<select name=\"file2\">\n";
+echo "<select name=\"file\">\n";
 echo '<option value=\"\">Logfiles</option>\n';
 foreach ($fileList as $file) {
+	$selectedfile = $_POST['file'];
 	echo "<option value=\"$file[name]\">$file[name]</option>\n";
-	$selectedfile = @$_POST['file2'];
-//	$selectedfile = $_POST['file2'];
 	$path = __DIR__.$parent_directory.$working_folder.$selectedfile;
 }
 echo '</select><br><br>';
@@ -127,10 +131,10 @@ echo "</body>\n";
 echo "</html>\n";
 }
 $reader = new Reader($path);
-echo "<td>".$selectedfile," Layout: ", dechex($reader->getLayoutHash()), nl2br("\n");
-if (isset($argv[2])) {
+echo "<td>".$selectedfile," <<<<>>>> Layout: 0x", dechex($reader->getLayoutHash())," <<<<>>>> Layout in integer: ", ($reader->getLayoutHash()), nl2br("\n");
+if (isset($_POST['pickfile'])) {
     $reader->fetchColumnNames();
-    print_r($reader->getRecord($argv[2]));
+    print_r($reader->getRecord($_GET['pickfile']));
     exit;
 }
 echo "<table>";
