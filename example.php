@@ -120,9 +120,10 @@ echo '<option value=\"\">Logfiles</option>\n';
 foreach ($fileList as $file) {
 	$selectedfile = $_POST['file'];
 	echo "<option value=\"$file[name]\">$file[name]</option>\n";
-	$path = __DIR__.$parent_directory.$working_folder.$selectedfile;
 }
 echo '</select><br><br>';
+
+$path = __DIR__.$parent_directory.$working_folder.$selectedfile;
 
 echo "<button type=\"submit\" name=\"pickFile\">Submit</button>\n";
 
