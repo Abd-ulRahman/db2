@@ -106,14 +106,14 @@ echo "<select name=\"folder\" onchange=\"changeFolder(this.value);\">\n";
 echo '<option value=\"\">Logfolder</option>\n';
 foreach ($directoryList as $folder) {
 
-$working_folder = ($_POST[folder]) ? '/'.$_POST[folder].'/' : '/'.$directoryList[0][name].'/';
-
   $selected = ($_POST[folder]==$folder[name])? 'selected' : '';
   echo "<option value=\"$folder[name]\" $selected>$folder[name]</option>\n";
 }
 echo '</select><br><br>';
-$fileList = directoryToArray($parent_directory.'/'.$working_folder,'f',$file_types);
 
+$working_folder = ($_POST[folder]) ? '/'.$_POST[folder].'/' : '/'.$directoryList[0][name].'/';
+
+$fileList = directoryToArray($parent_directory.'/'.$working_folder,'f',$file_types);
 
 echo "<select name=\"file\">\n";
 echo '<option value=\"\">Logfiles</option>\n';
