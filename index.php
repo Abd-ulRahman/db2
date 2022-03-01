@@ -126,7 +126,8 @@ foreach ($fileList as $file) {
 }
 echo '</select><br><br>';
 
-$working_file = ($_POST[file]) ? $_POST[file] : $fileList[0][name];
+//$working_file = ($_POST[file]) ? $_POST[file] : $fileList[0][name];
+$working_file = ($_POST[file]) ? $_POST[file] : ''; // prevent loading first file
 
 $path = __DIR__.'/'.$parent_directory.$working_folder.$working_file;
 
