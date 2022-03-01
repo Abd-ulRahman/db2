@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/erorus/db2.svg?branch=master)](https://travis-ci.org/erorus/db2) [![Coverage Status](https://coveralls.io/repos/github/erorus/db2/badge.svg?branch=master)](https://coveralls.io/github/erorus/db2?branch=master) [![Become a Patron!](https://everynothing.net/patronButton.png)](https://www.patreon.com/bePatron?u=4445407)
-#info
+
+# info
 Must enable these extension in php.ini
 
 extension=curl
