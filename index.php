@@ -121,21 +121,23 @@ $fileList = directoryToArray($parent_directory.'/'.$working_folder,'f',$file_typ
 echo "<select name=\"file\">\n";
 echo '<option value=\"\">Logfiles</option>\n';
 foreach ($fileList as $file) {
-	$selectedfile = $_POST['file'];
-	echo "<option value=\"$file[name]\">$file[name]</option>\n";
+	$selectedfile = ($_POST['file'] == $file['name'])? 'selected' : '';
+	echo "<option value=\"$file[name]\" $selectedfile>$file[name]</option>\n";
 }
 echo '</select><br><br>';
 
-$path = __DIR__.'/'.$parent_directory.$working_folder.$selectedfile;
+$working_file = ($_POST[file]) ? $_POST[file] : $fileList[0][name];
 
-echo "<button type=\"submit\" name=\"pickFile\">Submit</button>\n";
+$path = __DIR__.'/'.$parent_directory.$working_folder.$working_file;
+
+echo "<button type=\"submit\">Submit</button>\n";
 
 echo "</form>\n";
 echo "</body>\n";
 echo "</html>\n";
 }
 $reader = new Reader($path);
-echo "<td>".$selectedfile," <<<<>>>> Layout: 0x", dechex($reader->getLayoutHash())," <<<<>>>> Layout in integer: ", ($reader->getLayoutHash()), nl2br("\n");
+echo "<td>","Layout: 0x", dechex($reader->getLayoutHash())," - Layout int: ", ($reader->getLayoutHash()), nl2br("\n");
 if (isset($_POST['pickfile'])) {
     $reader->fetchColumnNames();
     print_r($reader->getRecord($_GET['pickfile']));
@@ -166,7 +168,7 @@ foreach ($reader->generateRecords() as $id => $record) {
 	echo "</tr>";
 
 	if (++$recordNum <= 0) {
-//	if (++$recordNum >= 10) { // used in examine huge data
+//	if (++$recordNum >= 10) { // Used in Examine Huge Data
         break;
     }
 }
