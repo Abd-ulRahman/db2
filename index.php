@@ -114,7 +114,8 @@ foreach ($directoryList as $folder) {
 }
 echo '</select><br><br>';
 
-$working_folder = ($_POST[folder]) ? '/'.$_POST[folder].'/' : '/'.$directoryList[0][name].'/';
+//$working_folder = ($_POST[folder]) ? '/'.$_POST[folder].'/' : '/'.$directoryList[0][name].'/';
+$working_folder = ($_POST[folder]) ? '/'.$_POST[folder].'/' : '';
 
 $fileList = directoryToArray($parent_directory.'/'.$working_folder,'f',$file_types);
 
