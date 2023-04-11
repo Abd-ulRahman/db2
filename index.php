@@ -109,10 +109,10 @@ foreach ($directoryList as $folder) {
 
 	$selected = ($_POST['folder'] == $folder['name'])? 'selected' : '';
 	echo "<option value=\"$folder[name]\" $selected>$folder[name]</option>\n";
-
-	$working_folder = ($_POST['folder']) ? '/'.$_POST['folder'].'/' : '/'.$directoryList[0]['name'].'/';
 }
 echo '</select><br><br>';
+
+$working_folder = ($_POST['folder']) ? '/'.$_POST['folder'].'/' : '/'.$directoryList[0]['name'].'/';
 
 $fileList = directoryToArray($parent_directory.'/'.$working_folder,'f',$file_types);
 
