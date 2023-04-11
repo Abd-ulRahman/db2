@@ -141,7 +141,7 @@ echo "<table>";
 echo "<tr>";
 
 $ColumnData = $reader->fetchColumnNames();
-echo '<tr><td>', implode('<td>', $ColumnData), '<td></tr>';
+echo '<tr>', implode('<td>', $ColumnData), '</tr>';
 $recordNum = 0;
 foreach ($reader->generateRecords() as $id => $record) {
     echo "<td>" .$id, ": "; // implode(',', Reader::flattenRecord($record));
