@@ -31,9 +31,7 @@ require_once __DIR__ . '/src/autoload.php';
 
 use \Erorus\DB2\Reader;
 
-
 $parent_directory = 'tests';
-
 $file_types = 'db2';
 
 //===================================================//
@@ -61,9 +59,9 @@ function directoryToArray($root, $to_return='b', $file_types=false) {
         }
 
         if ($type=='f' && ($to_return=='b' || $to_return=='f') ) {
-          $fext = (explode('.',$name));
-          $ext = strtolower(end($fext));
-      //  //  $ext = end(explode('.',$name));
+			$fext = (explode('.',$name));
+			$ext = strtolower(end($fext));
+	//	//	$ext = end(explode('.',$name));
           if ( !$file_types || in_array($ext, $file_types) ) {
             $add_item = true;
           }
@@ -79,9 +77,15 @@ function directoryToArray($root, $to_return='b', $file_types=false) {
   return $array_items;
 }
 
-if (isset($argv[1])) {
-    $path = $argv[1];
+if (isset($_POST['pickfile'])) {
+
+  // User has selected a file take whatever action you want based
+  // upon the values for folder and file
+
+    $path = $_GET['pickfile'];
+
 } else {
+
     echo '
 <html>
 <head>
@@ -99,39 +103,38 @@ echo "<form name=\"pickFile\" method=\"POST\">\n";
 
 $directoryList = directoryToArray($parent_directory,'d');
 
-//echo "<select name=\"folder\" onBlur=\"changeFolder(this.value);\">\n";
 echo "<select name=\"folder\" onchange=\"changeFolder(this.value);\">\n";
 echo '<option value=\"\">Logfolder</option>\n';
 foreach ($directoryList as $folder) {
-  $selected = ($_POST[folder]==$folder[name])? 'selected' : '';
-  echo "<option value=\"$folder[name]\" $selected>$folder[name]</option>\n";
+
+	$selected = ($_POST['folder'] == $folder['name'])? 'selected' : '';
+	echo "<option value=\"$folder[name]\" $selected>$folder[name]</option>\n";
+
+	$working_folder = ($_POST['folder']) ? '/'.$_POST['folder'].'/' : '/'.$directoryList[0]['name'].'/';
 }
 echo '</select><br><br>';
 
-$working_folder = ($_POST[folder]) ? '/'.$_POST[folder].'/' : '/'.$directoryList[0][name].'/';
-
 $fileList = directoryToArray($parent_directory.'/'.$working_folder,'f',$file_types);
-
 
 echo "<select name=\"file2\">\n";
 echo '<option value=\"\">Logfiles</option>\n';
 foreach ($fileList as $file) {
 	$selectedfile = @$_POST[file2];
-
 	echo "<option value=\"$file[name]\" $selectedfile>$file[name]</option>\n";
 
-	$path = __DIR__.'/'.$parent_directory.$working_folder.$selectedfile;
 }
 echo '</select><br><br>';
+
+$path = __DIR__.'/'.$parent_directory.$working_folder.$selectedfile;
 
 echo "<button type=\"submit\" name=\"pickFile\">Submit</button>\n";
 
 }
 $reader = new Reader($path);
 echo "<td>".$selectedfile," Layout: 0x", dechex($reader->getLayoutHash()),"- Layout to integer: ", ($reader->getLayoutHash()), nl2br("\n");
-if (isset($argv[2])) {
+if (isset($_POST['pickfile'])) {
     $reader->fetchColumnNames();
-    print_r($reader->getRecord($argv[2]));
+    print_r($reader->getRecord($_GET['pickfile']));
     exit;
 }
 echo "<table>";
@@ -159,7 +162,7 @@ foreach ($reader->generateRecords() as $id => $record) {
 	echo "</tr>";
 
 	if (++$recordNum <= 0) {
-//	if (++$recordNum >= 10) {
+//	if (++$recordNum >= 10) { // Used in Examine Huge Data
         break;
     }
 }
@@ -170,8 +173,6 @@ echo "</body>\n";
 echo "</html>\n";
 
 ?>
-
-
 
 </body>
 </html>
