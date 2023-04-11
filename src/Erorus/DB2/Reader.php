@@ -78,7 +78,7 @@ class Reader
             if ($this->fileHandle === false) {
                 throw new \Exception("Error opening ".$db2path);
             }
-            $this->fileName = basename($db2path);
+            $this->fileName = baseName($db2path);
         } else {
             throw new \Exception("Must supply path to DB2 file");
         }
