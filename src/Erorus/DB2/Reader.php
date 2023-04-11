@@ -120,6 +120,7 @@ class Reader
                 case 'WDC2':
                 case 'WDC3':
                 case '1SLC':
+                case 'WDC4':
                     if (!is_null($arg) && !is_array($arg)) {
                         throw new \Exception("You may only pass an array of string fields when loading a DB2");
                     }
@@ -631,6 +632,21 @@ class Reader
         $this->commonBlockPos = $this->palletDataPos + $this->palletDataSize;
 
         $eof += $this->commonBlockPos + $this->commonBlockSize;
+
+        if ($this->fileFormat === 'WDC4') {
+            $returnTo = ftell($this->fileHandle);
+            $encryptedIdBlockPos = $this->commonBlockPos + $this->commonBlockSize;
+            fseek($this->fileHandle, $encryptedIdBlockPos);
+            for ($x = 1; $x < $this->sectionCount; $x++) {
+                $idCount = unpack('V', fread($this->fileHandle, 4))[1];
+                fseek($this->fileHandle, $idCount * 4, SEEK_CUR);
+            }
+            $encryptedIdBlockSize = ftell($this->fileHandle) - $encryptedIdBlockPos;
+            fseek($this->fileHandle, $returnTo);
+
+            $eof += $encryptedIdBlockSize;
+        }
+
         if ($eof != $this->fileSize) {
             throw new \Exception("Expected size: $eof, actual size: ".$this->fileSize);
         }
@@ -1385,9 +1401,23 @@ class Reader
         // only required when hasEmbeddedStrings,
         // since it has the index block to map back into the data block
 
+        $isWdc2 = in_array($this->fileFormat, ['WDC2', '1SLC']);
+        $maxRecordIndex = max($this->idMap);
+
         $idLists = [];
         foreach ($this->sectionHeaders as $sectionId => $section) {
-            if (isset($section['indexIdListSize']) && $section['indexIdListSize'] && !$section['encrypted']) {
+            if ($section['encrypted']) {
+                continue;
+            }
+
+            if ($isWdc2) {
+                // No ID list in the file.
+                $idLists[$sectionId] = range($this->minId, $this->maxId);
+            } else {
+                // This format typically includes an ID list.
+                if (!isset($section['indexIdListSize']) || $section['indexIdListSize'] === 0) {
+                    continue;
+                }
                 fseek($this->fileHandle, $section['indexIdListPos']);
                 $idLists[$sectionId] = array_values(unpack('V*', fread($this->fileHandle, $section['indexIdListSize'])));
             }
@@ -1416,7 +1446,10 @@ class Reader
                     $pointer = unpack('Vpos/vsize', fread($this->fileHandle, 6));
                     $pointer['id'] = $x;
                 }
-                if ($pointer['size'] > 0 && isset($this->idMap[$pointer['id']])) {
+                if ($pointer['size'] > 0) {
+                    if (!isset($this->idMap[$pointer['id']])) {
+                        $this->idMap[$pointer['id']] = ++$maxRecordIndex;
+                    }
                     $this->recordOffsets[$this->idMap[$pointer['id']]] = $pointer;
                 }
             }
@@ -1735,7 +1768,8 @@ class Reader
     }
 
     private function getRecordByOffset($recordOffset, $id) {
-        if ($recordOffset < 0 || $recordOffset >= $this->recordCount) {
+        // Blizzard's record count may be inaccurate if there is an offset map.
+        if (!$this->recordOffsets && ($recordOffset < 0 || $recordOffset >= $this->recordCount)) {
             // @codeCoverageIgnoreStart
             throw new \Exception("Requested record offset $recordOffset out of bounds: 0-".$this->recordCount);
             // @codeCoverageIgnoreEnd
@@ -1858,14 +1892,16 @@ class Reader
                         $stringSection = -1;
 
                         if ($sectionId >= 0) {
-                            // Move back to first value of field
-                            $stringPos += 4 * $valueId;
-                            // Move back to start of row
-                            $stringPos += $format['offset'];
-                            // Move back to start of first record
-                            $stringPos += $recordOffset * $this->recordSize;
-                            // Advance past all data records
-                            $stringPos -= $this->recordCount * $this->recordSize;
+                            if ($stringPos !== 0) {
+                                // Move back to first value of field
+                                $stringPos += 4 * $valueId;
+                                // Move back to start of row
+                                $stringPos += $format['offset'];
+                                // Move back to start of first record
+                                $stringPos += $recordOffset * $this->recordSize;
+                                // Advance past all data records
+                                $stringPos -= $this->recordCount * $this->recordSize;
+                            }
 
                             // Modify stringPos to offset within correct string block, and get section of that block
                             $this->getStringFileOffset($stringPos, $stringSection);
