@@ -141,10 +141,13 @@ echo "<table>";
 echo "<tr>";
 
 $ColumnData = $reader->fetchColumnNames();
-echo '<tr><td>', implode('<td>', $ColumnData), '<td></tr>';
+foreach ($ColumnData as $id => $record) {
+$arr = array($id, '-' , $record);
+echo '<td>' ,implode( "", $arr), '</td>';
+}
 $recordNum = 0;
 foreach ($reader->generateRecords() as $id => $record) {
-    echo "<td>" .$id, ": "; // implode(',', Reader::flattenRecord($record));
+    echo "<tr><td>" .$id, ": "; // implode(',', Reader::flattenRecord($record));
 
     $colNum = 0;
     foreach ($record as $colName => $colVal) {
