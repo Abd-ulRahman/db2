@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 <head>
@@ -131,7 +130,8 @@ echo "<button type=\"submit\" name=\"pickFile\">Submit</button>\n";
 
 }
 $reader = new Reader($path);
-echo "<td>".$selectedfile," Layout: 0x", dechex($reader->getLayoutHash()),"- Layout to integer: ", ($reader->getLayoutHash()), nl2br("\n");
+echo '<td><font color="yellow">'.$selectedfile," - Layout: 0x", dechex($reader->getLayoutHash())," - Layout in integer: ", ($reader->getLayoutHash()), nl2br("\n");
+echo '</font>';
 if (isset($_POST['pickfile'])) {
     $reader->fetchColumnNames();
     print_r($reader->getRecord($_GET['pickfile']));
@@ -143,7 +143,7 @@ echo "<tr>";
 $ColumnData = $reader->fetchColumnNames();
 foreach ($ColumnData as $id => $record) {
 $arr = array('(',$id + 1,')', ' ' , $record);
-echo '<td>' ,implode( "", $arr), '</td>';
+echo '<td><font color="gold">' ,implode( "", $arr), '</font></td>';
 }
 $recordNum = 0;
 foreach ($reader->generateRecords() as $id => $record) {
