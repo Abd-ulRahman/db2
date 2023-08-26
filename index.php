@@ -142,7 +142,7 @@ echo "<tr>";
 
 $ColumnData = $reader->fetchColumnNames();
 foreach ($ColumnData as $id => $record) {
-$arr = array($id, '-' , $record);
+$arr = array('(',$id + 1,')', ' ' , $record);
 echo '<td>' ,implode( "", $arr), '</td>';
 }
 $recordNum = 0;
