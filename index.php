@@ -131,7 +131,7 @@ echo "<button type=\"submit\" name=\"pickFile\">Submit</button>\n";
 }
 $reader = new Reader($path);
 echo '<td><font color="yellow">'.$selectedfile," - Layout: 0x", dechex($reader->getLayoutHash())," - Layout in integer: ", ($reader->getLayoutHash()), nl2br("\n");
-echo '</font>';
+echo '</font></td>';
 if (isset($_POST['pickfile'])) {
     $reader->fetchColumnNames();
     print_r($reader->getRecord($_GET['pickfile']));
