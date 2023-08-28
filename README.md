@@ -13,6 +13,8 @@ To
 max_execution_time=120
 
 # Screen Shots
+Latest Layout
+![Latest](https://github.com/Abd-ulRahman/db2/assets/1366228/75325c6b-50a4-46ad-90db-de697713f8a2)
 
 ![alt tag](https://i.imgur.com/P8Ujzdr.png "WDB2")
 
